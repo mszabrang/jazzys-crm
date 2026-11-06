@@ -1,6 +1,6 @@
 const express = require('express');
 const crypto = require('crypto');
-const { flexAuth } = require('../middleware/auth');
+const { flexAuth } = require('../middleware/Auth');
 const { lagosToday, nextBirthday } = require('../utils/dates');
 const { sendBirthdayMessageNow } = require('../services/birthdayService');
 

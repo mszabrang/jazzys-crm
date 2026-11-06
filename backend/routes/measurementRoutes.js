@@ -1,6 +1,6 @@
 const express = require('express');
 const crypto = require('crypto');
-const { allStaffAuth } = require('../middleware/auth');
+const { allStaffAuth } = require('../middleware/Auth');
 
 module.exports = (pool) => {
   const router = express.Router();

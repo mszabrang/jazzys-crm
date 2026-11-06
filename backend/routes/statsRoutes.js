@@ -1,5 +1,5 @@
 const express = require('express');
-const { flexAuth } = require('../middleware/auth');
+const { flexAuth } = require('../middleware/Auth');
 
 const PERIOD_MAP = {
   '30days': '30 days',

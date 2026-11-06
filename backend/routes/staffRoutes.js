@@ -1,7 +1,7 @@
 const express = require('express');
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');
-const { flexAuth } = require('../middleware/auth');
+const { flexAuth } = require('../middleware/Auth');
 
 module.exports = (pool) => {
   const router = express.Router();

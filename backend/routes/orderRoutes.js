@@ -1,6 +1,6 @@
 const express = require('express');
 const crypto = require('crypto');
-const { flexAuth, allStaffAuth } = require('../middleware/auth');
+const { flexAuth, allStaffAuth } = require('../middleware/Auth');
 
 const VALID_STATUSES = ['pending', 'in_progress', 'ready', 'delivered'];
 

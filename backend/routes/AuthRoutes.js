@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const express = require('express');
-const { allStaffAuth } = require('../middleware/auth');
+const { allStaffAuth } = require('../middleware/Auth');
 const { sendMail } = require('../services/mailer');
 const { resetPasswordEmail } = require('../services/emailTemplates');
 

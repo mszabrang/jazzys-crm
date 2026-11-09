@@ -1,4 +1,4 @@
-import Dropdown from './Dropdown';
+import Dropdown from './dropdown';
 
 // Same props as before, so AddOrderModal does not need to change:
 // items = [{ id, first_name, last_name }], onChange receives an event-like { target: { value } }

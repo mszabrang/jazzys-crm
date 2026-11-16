@@ -1,8 +1,29 @@
 const express = require('express');
 const crypto = require('crypto');
 const { flexAuth, allStaffAuth } = require('../middleware/Auth');
+const { sendMail } = require('../services/mailer');
+const { orderProcessingEmail } = require('../services/emailTemplates');
 
 const VALID_STATUSES = ['pending', 'in_progress', 'ready', 'delivered'];
+
+// Emails the customer that their new order is being processed.
+// Never throws: a missing email address or a Brevo problem must not affect the order itself.
+async function notifyCustomerOrderProcessing(pool, { Customer_ID, description, dueDate }) {
+  try {
+    const result = await pool.query('SELECT first_name, email FROM Customers WHERE id = $1', [Customer_ID]);
+    const customer = result.rows[0];
+    if (!customer || !customer.email || !customer.email.trim()) return;
+
+    const { subject, html, text } = orderProcessingEmail({
+      customerName: customer.first_name,
+      description,
+      dueDate,
+    });
+    await sendMail({ to: customer.email.trim(), subject, html, text });
+  } catch (error) {
+    console.error('ORDER EMAIL ERROR:', error.message);
+  }
+}
 
 module.exports = (pool) => {
   const router = express.Router();
@@ -65,7 +86,12 @@ module.exports = (pool) => {
         [Order_ID, dueDate, amount, finalAmountPaid, description, staff_ID, Customer_ID]
       );
 
-      return res.status(201).json({ message: 'Order created successfully.' });
+      res.status(201).json({ message: 'Order created successfully.' });
+
+      // Tell the customer their order is being processed. Runs after the reply is sent,
+      // so staff are never kept waiting and an email problem never breaks order creation.
+      notifyCustomerOrderProcessing(pool, { Customer_ID, description, dueDate });
+      return;
     } catch (error) {
       console.error(error.message);
       return res.status(500).json({ message: 'Server error.' });

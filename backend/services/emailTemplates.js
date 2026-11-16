@@ -151,4 +151,29 @@ function deliveryReminderEmail({ adminName, orders, dashboardUrl }) {
   };
 }
 
-module.exports = { resetPasswordEmail, birthdaySummaryEmail, customerBirthdayEmail, deliveryReminderEmail };
+// 5. Order received — emailed to the customer the moment staff create their order
+// order: { customerName, description, dueDate }
+function orderProcessingEmail({ customerName, description, dueDate }) {
+  const desc = esc(description || 'No description').replace(/\n/g, '<br>');
+  const rows = [
+    row('<strong>Order</strong>', `<span style="color:${BRAND.ink};text-align:right;">${desc}</span>`),
+  ];
+  if (dueDate) rows.push(row('<strong>Expected delivery</strong>', fmtDate(dueDate)));
+
+  return {
+    subject: 'We are processing your order',
+    html: layout(`We have received your order and started working on it.`,
+      h1('Your order is being processed') +
+      p(`Hi ${esc(customerName)},`) +
+      p('Thank you for choosing Jazzy’s RTW. We have received your order and it is now being processed.') +
+      list(rows) +
+      p('We will let you know when it is ready.') +
+      p('With love,<br>Jazzy’s RTW.')),
+    text: `Hi ${customerName},\n\nThank you for choosing Jazzy’s RTW. We have received your order and it is now being processed.\n\n` +
+      `Order: ${description || 'No description'}\n` +
+      (dueDate ? `Expected delivery: ${fmtDate(dueDate)}\n` : '') +
+      `\nWe will let you know when it is ready.\n\nWith love,\nJazzy’s RTW.`,
+  };
+}
+
+module.exports = { resetPasswordEmail, birthdaySummaryEmail, customerBirthdayEmail, deliveryReminderEmail, orderProcessingEmail };

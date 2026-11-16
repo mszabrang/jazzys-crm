@@ -70,10 +70,8 @@ export default function PublicCustomerRegisterPage() {
         <p className="auth-subtitle">Register as a customer</p>
 
         <form onSubmit={handleSubmit} className="auth-form">
-          <div className="field-row">
-            <InputCard type="text" onChange={set('firstName')} labelValue="First name" value={form.firstName} />
-            <InputCard type="text" onChange={set('lastName')} labelValue="Last name" value={form.lastName} />
-          </div>
+          <InputCard type="text" onChange={set('firstName')} labelValue="First name" value={form.firstName} />
+          <InputCard type="text" onChange={set('lastName')} labelValue="Last name" value={form.lastName} />
           <InputCard type="email" onChange={set('email')} labelValue="Email address" value={form.email} />
           <InputCard type="tel" onChange={set('phoneNumber')} labelValue="Phone number" value={form.phoneNumber} />
           <InputCard type="date" onChange={set('birthday')} labelValue="Date of birth" value={form.birthday} />
